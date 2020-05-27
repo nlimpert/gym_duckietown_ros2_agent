@@ -84,7 +84,30 @@ class ROSAgent(Node):
         ci = CameraInfo()
         ci.header.stamp = img.header.stamp
         ci.header.frame_id = img.header.frame_id
+
+        ci.width = self.env.camera_width
+        ci.height = self.env.camera_height
         
+        # taken from
+        # duckietown/Software/blob/master19/catkin_ws/src/07-image-processing/pi_camera/include/pi_camera/camera_info.py
+        ci.k = [
+            305.5718893575089, 0.0, 303.0797142544728,
+            0.0, 308.8338858195428, 231.8845403702499,
+            0.0, 0.0, 1.0
+        ]
+
+        # taken from
+        # duckietown/Software/blob/master19/catkin_ws/src/07-image-processing/pi_camera/include/pi_camera/camera_info.py
+        ci.d = [-0.2944667743901807, 0.0701431287084318, 0.0005859930422629722, -0.0006697840226199427, 0.0]
+
+        # taken from
+        # duckietown/Software/blob/master19/catkin_ws/src/07-image-processing/pi_camera/include/pi_camera/camera_info.py
+        ci.p = [
+            220.2460277141687, 0.0, 301.8668918355899, 0.0,
+            0.0, 238.6758484095299, 227.0880056118307, 0.0,
+            0.0, 0.0, 1.0, 0.0
+        ]
+
         self.cam_info_pub.publish(ci)
 
     def _publish_img(self, obs):
