@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import CompressedImage, CameraInfo
+from geometry_msgs.msg import Pose2D
 from duckietown_msgs.msg import Twist2DStamped, WheelsCmdStamped
 import numpy as np
 import os
@@ -42,6 +43,9 @@ class ROSAgent(Node):
         self.cam_info_pub = self.create_publisher(CameraInfo,
                                                   '/{}/camera_node/camera_info'.format(self.vehicle), 10)
 
+        self.pose_pub = self.create_publisher(Pose2D,
+                                             '/{}/pose'.format(self.vehicle), 10)                                                
+
         # Initialize timer for continuous publication of camera images and info
         timer_period = 0.1
         self.timer = self.create_timer(timer_period, self.timer_callback)
@@ -56,8 +60,13 @@ class ROSAgent(Node):
         """
         Timer callback for publication of camera data
         """
-        img, r, d, _ = self.env.step(self.action)
+        img, r, d, misc = self.env.step(self.action)
         self._publish_img(img)
+        pose = Pose2D()
+        pose.x = misc['Simulator']['cur_pos'][0]
+        pose.y = misc['Simulator']['cur_pos'][2]
+        pose.theta = misc['Simulator']['cur_angle']
+        self.pose_pub.publish(pose)
 
     def _action_cb(self, msg):
         """
