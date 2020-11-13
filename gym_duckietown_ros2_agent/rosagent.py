@@ -76,6 +76,16 @@ class ROSAgent(Node):
         v = msg.v
         omega = msg.omega
 
+        vl=0.0
+        vr=0.0
+
+        """
+        calculcate vl & vr here depending on desired v & omega
+        """
+
+        self.action = np.array([vl, vr])
+
+
     def _ik_action_cb(self, msg):
         """
         Callback to listen to last outputted action from lane_controller_node
