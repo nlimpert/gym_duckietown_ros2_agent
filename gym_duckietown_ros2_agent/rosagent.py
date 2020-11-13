@@ -37,11 +37,11 @@ class ROSAgent(Node):
         # Publishes onto the corrected image topic
         # since image out of simulator is currently rectified
         self.cam_pub = self.create_publisher(CompressedImage,
-                                             '/{}/corrected_image/compressed'.format(self.vehicle), 10)
+                                             '/{}/camera/image/compressed'.format(self.vehicle), 10)
 
         # Publisher for camera info - needed for the ground_projection
         self.cam_info_pub = self.create_publisher(CameraInfo,
-                                                  '/{}/camera_node/camera_info'.format(self.vehicle), 10)
+                                                  '/{}/camera/camera_info'.format(self.vehicle), 10)
 
         self.pose_pub = self.create_publisher(Pose2D,
                                              '/{}/pose'.format(self.vehicle), 10)                                                
